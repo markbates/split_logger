@@ -2,15 +2,6 @@ require File.join(File.dirname(__FILE__), '..', 'spec_helper')
 
 describe SplitLogger do
 
-  it 'should use a default logger if none is added' do
-    log = mock('logger')
-    log.should_receive(:error).with('hi!')
-    Logger.should_receive(:new).with(STDOUT).and_return(log)
-    sp = SplitLogger.new
-    sp.list.size.should == 0
-    sp.error('hi!')
-  end
-
   describe 'add' do
     
     it 'should add a logger to the list' do

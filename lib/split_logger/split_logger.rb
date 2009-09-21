@@ -29,19 +29,13 @@ class SplitLogger
   
   [:debug, :info, :warn, :error, :fatal].each do |level|
     define_method(level) do |*args|
-      if self.logger_list.empty?
-        logger = ::Logger.new(STDOUT)
-        self.add(:default, logger)
-        logger.send(level, *args)
-      else
-        self.logger_list.each do |name, logger|
-          begin
-            logger.send(level, *args)
-          rescue Exception => e
-            self.remove(name)
-            self.send(level, e.message)
-            self.send(level, "Removed logger '#{name}' from the logger list!")
-          end
+      self.logger_list.each do |name, logger|
+        begin
+          logger.send(level, *args)
+        rescue Exception => e
+          self.remove(name)
+          self.send(level, e.message)
+          self.send(level, "Removed logger '#{name}' from the logger list!")
         end
       end
     end
