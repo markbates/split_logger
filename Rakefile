@@ -1,14 +1,10 @@
-require 'rubygems'
-require 'gemstub'
+require "bundler/gem_tasks"
+require 'rake/testtask'
 
-Gemstub.test_framework = :rspec
-
-Gemstub.gem_spec do |s|
-  s.version = "1.0.1"
-  s.rubyforge_project = "magrathea"
-  # s.add_dependency('')
+Rake::TestTask.new do |t|
+  t.libs = ['lib','test']
+  t.test_files = Dir.glob("test/**/*_test.rb").sort
+  t.verbose = true
 end
 
-Gemstub.rdoc do |rd|
-  rd.title = "split_logger"
-end
+task :default => :test

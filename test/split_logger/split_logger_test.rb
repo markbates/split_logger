@@ -1,92 +1,89 @@
-require File.join(File.dirname(__FILE__), '..', 'spec_helper')
+require 'test_helper'
+require 'logger'
 
 describe SplitLogger do
 
+  let(:sp) {SplitLogger.new}
+
   describe 'add' do
-    
+
     it 'should add a logger to the list' do
-      sp = SplitLogger.new
-      sp.list.size.should == 0
-      sp.add(:std, Logger.new(STDOUT))
-      sp.list.size.should == 1
+      sp.list.size.must_equal 0
+      sp.add(:std, ::Logger.new(STDOUT))
+      sp.list.size.must_equal 1
     end
-    
+
   end
-  
+
   describe 'list' do
-    
+
     it 'should return a list of all loggers' do
-      sp = SplitLogger.new
       std = mock('std logger')
       sp.add(:std, std)
-      sp.list.should == {:std => std}
+      sp.list.must_equal(std: std)
     end
-    
+
   end
-  
+
   describe 'remove' do
-    
+
     it 'should remove a logger from the list' do
-      sp = SplitLogger.new
       std = mock('std logger')
       sp.add(:std, std)
       other = mock('other logger')
       sp.add(:other, other)
-      sp.list.should == {:std => std, :other => other}
+      sp.list.must_equal(std: std, other: other)
       sp.remove(:other)
-      sp.list.should == {:std => std}
+      sp.list.must_equal(std: std)
     end
-    
+
   end
-  
+
   describe 'Rails' do
-    
+
     before(:each) do
       Object.send(:remove_const, 'RAILS_DEFAULT_LOGGER') if defined?(RAILS_DEFAULT_LOGGER)
     end
-    
+
     after(:each) do
       Object.send(:remove_const, 'RAILS_DEFAULT_LOGGER') if defined?(RAILS_DEFAULT_LOGGER)
     end
-    
+
     it 'should automatically add the RAILS_DEFAULT_LOGGER to the list, if defined' do
       RAILS_DEFAULT_LOGGER = mock('rails_default_logger')
-      sp = SplitLogger.new
-      sp.list.should == {:rails_default_logger => RAILS_DEFAULT_LOGGER}
+      sp.list.must_equal(rails_default_logger: RAILS_DEFAULT_LOGGER)
     end
-    
+
   end
-  
-  [:debug, :info, :warn, :error, :fatal].each do |level| 
-    
+
+  [:debug, :info, :warn, :error, :fatal].each do |level|
+
     describe level do
-      
+
       it "should call #{level} on each logger" do
         std = mock('std logger')
         other = mock('other logger')
-        std.should_receive(level).with('this is my message')
-        other.should_receive(level).with('this is my message')
-        sp = SplitLogger.new
+        std.expects(level).with('this is my message')
+        other.expects(level).with('this is my message')
         sp.add(:std, std)
         sp.add(:other, other)
         sp.send(level, 'this is my message')
       end
-      
+
       it 'should remove a bad logger from the list and write a message to the other loggers' do
         std = mock('std logger')
-        std.should_receive(level).with('this is my message')
-        std.should_receive(level).with("Ah! Crap!")
-        std.should_receive(level).with("Removed logger 'oops' from the logger list!")
+        std.expects(level).with('this is my message')
+        std.expects(level).with("Ah! Crap!")
+        std.expects(level).with("Removed logger 'oops' from the logger list!")
         oops = mock('oops')
-        oops.should_receive(level).with('this is my message').and_raise('Ah! Crap!')
-        sp = SplitLogger.new
+        oops.expects(level).with('this is my message').raises('Ah! Crap!')
         sp.add(:std, std)
         sp.add(:oops, oops)
         sp.send(level, 'this is my message')
       end
-      
+
     end
-    
+
   end
 
 end

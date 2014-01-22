@@ -1,29 +1,25 @@
-# -*- encoding: utf-8 -*-
+# coding: utf-8
+lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'split_logger/version'
 
-Gem::Specification.new do |s|
-  s.name = %q{split_logger}
-  s.version = "1.0.1.20090921170734"
+Gem::Specification.new do |spec|
+  spec.name          = "split_logger"
+  spec.version       = SplitLogger::VERSION
+  spec.authors       = ["Mark Bates"]
+  spec.email         = ["mark@markbates.com"]
+  spec.summary       = %q{TODO: Write a short summary. Required.}
+  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.homepage      = ""
+  spec.license       = "MIT"
 
-  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["markbates"]
-  s.date = %q{2009-09-21}
-  s.description = %q{split_logger was developed by: markbates}
-  s.email = %q{}
-  s.extra_rdoc_files = ["README", "LICENSE"]
-  s.files = ["lib/split_logger/split_logger.rb", "lib/split_logger.rb", "README", "LICENSE"]
-  s.homepage = %q{}
-  s.require_paths = ["lib"]
-  s.rubyforge_project = %q{magrathea}
-  s.rubygems_version = %q{1.3.5}
-  s.summary = %q{split_logger}
+  spec.files         = `git ls-files -z`.split("\x0")
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.require_paths = ["lib"]
 
-  if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 3
-
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
-    else
-    end
-  else
-  end
+  spec.add_development_dependency "bundler", "~> 1.5"
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "minitest"
+  spec.add_development_dependency "mocha"
 end

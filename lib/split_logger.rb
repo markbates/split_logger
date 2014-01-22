@@ -1,4 +1,2 @@
-require 'logger'
-Dir.glob(File.join(File.dirname(__FILE__), 'split_logger', '**/*.rb')).each do |f|
-  require File.expand_path(f)
-end
+require "split_logger/version"
+require "split_logger/split_logger"
