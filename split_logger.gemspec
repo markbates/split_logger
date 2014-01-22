@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = SplitLogger::VERSION
   spec.authors       = ["Mark Bates"]
   spec.email         = ["mark@markbates.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{This gem let's you write to multiple log destinations at the same time.}
+  spec.description   = %q{This gem let's you write to multiple log destinations at the same time.}
+  spec.homepage      = "http://github.com/markbates/split_logger"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
